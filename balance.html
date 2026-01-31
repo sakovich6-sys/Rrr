@@ -1,57 +1,143 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Balance</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Баланс</title>
 
-<style>
-body {
-  margin:0;
-  font-family:-apple-system,BlinkMacSystemFont,sans-serif;
-  background:#F2EDE4;
-  color:#1F3D2B;
-  text-align:center;
-}
-h1 { margin-top:40px; font-size:48px; }
-button {
-  margin:10px;
-  padding:16px 28px;
-  font-size:18px;
-  border:none;
-  border-radius:18px;
-}
-.income { background:#A9C7D8; }
-.expense { background:#E4BFC6; }
-</style>
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #f6f1eb;
+      text-align: center;
+      padding-bottom: 220px;
+    }
+
+    h1 {
+      margin-top: 40px;
+    }
+
+    #balance {
+      font-size: 40px;
+      margin: 20px 0;
+    }
+
+    .actions button {
+      padding: 15px 25px;
+      margin: 10px;
+      font-size: 18px;
+      border-radius: 16px;
+      border: none;
+    }
+
+    .income { background: #b7d8c6; }
+    .expense { background: #e8bcbc; }
+
+    /* --- Клавиатура --- */
+    .keypad {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #ece7df;
+      padding: 20px;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+    }
+
+    .hidden { display: none; }
+
+    #display {
+      font-size: 32px;
+      margin-bottom: 15px;
+    }
+
+    .keys {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .keys button {
+      padding: 18px;
+      font-size: 22px;
+      border-radius: 14px;
+      border: none;
+    }
+  </style>
 </head>
 
 <body>
 
-<h1 id="balance">0 ₽</h1>
+  <h1>Мой баланс</h1>
+  <div id="balance">0</div>
 
-<button class="income" onclick="add(1)">+ Доход</button>
-<button class="expense" onclick="add(-1)">– Расход</button>
+  <div class="actions">
+    <button class="income" onclick="openKeypad('income')">+ Доход</button>
+    <button class="expense" onclick="openKeypad('expense')">− Расход</button>
+  </div>
 
-<script>
-let balance = Number(localStorage.getItem("balance")) || 0;
-const el = document.getElementById("balance");
-render();
+  <!-- Клавиатура -->
+  <div id="keypad" class="keypad hidden">
+    <div id="display">0</div>
 
-function add(type){
-  const value = prompt("Сумма");
-  if(!value) return;
-  const sum = Number(value);
-  if(isNaN(sum)) return alert("Введите число");
-  balance += sum * type;
-  localStorage.setItem("balance", balance);
-  render();
-}
+    <div class="keys">
+      <button onclick="addDigit(1)">1</button>
+      <button onclick="addDigit(2)">2</button>
+      <button onclick="addDigit(3)">3</button>
 
-function render(){
-  el.textContent = balance + " ₽";
-}
-</script>
+      <button onclick="addDigit(4)">4</button>
+      <button onclick="addDigit(5)">5</button>
+      <button onclick="addDigit(6)">6</button>
+
+      <button onclick="addDigit(7)">7</button>
+      <button onclick="addDigit(8)">8</button>
+      <button onclick="addDigit(9)">9</button>
+
+      <button onclick="removeDigit()">⌫</button>
+      <button onclick="addDigit(0)">0</button>
+      <button onclick="confirm()">OK</button>
+    </div>
+  </div>
+
+  <script>
+    let balance = 0;
+    let currentValue = "";
+    let currentType = "income";
+
+    function openKeypad(type) {
+      currentType = type;
+      currentValue = "";
+      updateDisplay();
+      document.getElementById("keypad").classList.remove("hidden");
+    }
+
+    function addDigit(d) {
+      currentValue += d;
+      updateDisplay();
+    }
+
+    function removeDigit() {
+      currentValue = currentValue.slice(0, -1);
+      updateDisplay();
+    }
+
+    function updateDisplay() {
+      document.getElementById("display").innerText = currentValue || "0";
+    }
+
+    function confirm() {
+      if (!currentValue) return;
+
+      const amount = Number(currentValue);
+      if (currentType === "income") balance += amount;
+      else balance -= amount;
+
+      document.getElementById("balance").innerText = balance;
+      document.getElementById("keypad").classList.add("hidden");
+    }
+  </script>
 
 </body>
 </html>
