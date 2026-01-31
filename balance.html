@@ -1,48 +1,57 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Balance</title>
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+
 <style>
-:root{
-  --beige:#F2EDE4;
-  --blue:#A9C7D8;
-  --pink:#E4BFC6;
-  --green:#1F3D2B;
-}
-body{
+body {
   margin:0;
-  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",Arial,sans-serif;
-  background:var(--beige);
-  color:#222;
-}
-.wrap{padding:24px}
-.month{opacity:.6}
-.balance{font-size:42px;font-weight:700;color:var(--green);margin:12px 0 24px}
-.row{display:flex;gap:16px}
-.btn{
-  flex:1;
-  padding:14px 16px;
-  border-radius:18px;
-  font-size:18px;
-  font-weight:600;
+  font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+  background:#F2EDE4;
+  color:#1F3D2B;
   text-align:center;
 }
-.plus{background:var(--blue)}
-.minus{background:var(--pink)}
+h1 { margin-top:40px; font-size:48px; }
+button {
+  margin:10px;
+  padding:16px 28px;
+  font-size:18px;
+  border:none;
+  border-radius:18px;
+}
+.income { background:#A9C7D8; }
+.expense { background:#E4BFC6; }
 </style>
 </head>
+
 <body>
-  <div class="wrap">
-    <div class="month">Март</div>
-    <div class="balance">125 000 ₽</div>
-    <div class="row">
-      <div class="btn plus">+ Доход</div>
-      <div class="btn minus">– Расход</div>
-    </div>
-  </div>
+
+<h1 id="balance">0 ₽</h1>
+
+<button class="income" onclick="add(1)">+ Доход</button>
+<button class="expense" onclick="add(-1)">– Расход</button>
+
+<script>
+let balance = Number(localStorage.getItem("balance")) || 0;
+const el = document.getElementById("balance");
+render();
+
+function add(type){
+  const value = prompt("Сумма");
+  if(!value) return;
+  const sum = Number(value);
+  if(isNaN(sum)) return alert("Введите число");
+  balance += sum * type;
+  localStorage.setItem("balance", balance);
+  render();
+}
+
+function render(){
+  el.textContent = balance + " ₽";
+}
+</script>
+
 </body>
 </html>
