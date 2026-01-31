@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Balance</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<style>
+:root{
+  --beige:#F2EDE4;
+  --blue:#A9C7D8;
+  --pink:#E4BFC6;
+  --green:#1F3D2B;
+}
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",Arial,sans-serif;
+  background:var(--beige);
+  color:#222;
+}
+.wrap{padding:24px}
+.month{opacity:.6}
+.balance{font-size:42px;font-weight:700;color:var(--green);margin:12px 0 24px}
+.row{display:flex;gap:16px}
+.btn{
+  flex:1;
+  padding:14px 16px;
+  border-radius:18px;
+  font-size:18px;
+  font-weight:600;
+  text-align:center;
+}
+.plus{background:var(--blue)}
+.minus{background:var(--pink)}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="month">Март</div>
+    <div class="balance">125 000 ₽</div>
+    <div class="row">
+      <div class="btn plus">+ Доход</div>
+      <div class="btn minus">– Расход</div>
+    </div>
+  </div>
+</body>
+</html>
