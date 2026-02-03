@@ -1,143 +1,87 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Баланс</title>
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
 
-  <style>
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #f6f1eb;
-      text-align: center;
-      padding-bottom: 220px;
-    }
+export default function App() {
+  const [balance] = useState(2430.75);
 
-    h1 {
-      margin-top: 40px;
-    }
+  const categories = [
+    { id: 'coffee', title: 'Кофе', icon: '☕' },
+    { id: 'food', title: 'Еда', icon: '🍔' },
+    { id: 'sport', title: 'Спорт', icon: '🏀' },
+    { id: 'auto', title: 'Авто', icon: '🚗' },
+    { id: 'home', title: 'Дом', icon: '🏠' },
+    { id: 'add', title: '', icon: '+' },
+  ];
 
-    #balance {
-      font-size: 40px;
-      margin: 20px 0;
-    }
+  return (
+    <SafeAreaView style={styles.container}>
+      {/* Баланс */}
+      <View style={styles.balanceContainer}>
+        <Text style={styles.balanceLabel}>Баланс</Text>
+        <Text style={styles.balanceValue}>{balance.toFixed(2)} $</Text>
+      </View>
 
-    .actions button {
-      padding: 15px 25px;
-      margin: 10px;
-      font-size: 18px;
-      border-radius: 16px;
-      border: none;
-    }
+      {/* Категории */}
+      <View style={styles.grid}>
+        {categories.map((cat) => (
+          <TouchableOpacity
+            key={cat.id}
+            style={styles.card}
+            activeOpacity={0.7}
+            onPress={() => console.log(cat.id)}
+          >
+            <Text style={styles.icon}>{cat.icon}</Text>
+            {cat.title ? <Text style={styles.title}>{cat.title}</Text> : null}
+          </TouchableOpacity>
+        ))}
+      </View>
+    </SafeAreaView>
+  );
+}
 
-    .income { background: #b7d8c6; }
-    .expense { background: #e8bcbc; }
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#0E1116',
+  },
 
-    /* --- Клавиатура --- */
-    .keypad {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: #ece7df;
-      padding: 20px;
-      border-top-left-radius: 20px;
-      border-top-right-radius: 20px;
-    }
+  balanceContainer: {
+    height: '10%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  balanceLabel: {
+    color: '#8C93A1',
+    fontSize: 14,
+  },
+  balanceValue: {
+    color: '#E6EAF0',
+    fontSize: 32,
+    fontWeight: '600',
+  },
 
-    .hidden { display: none; }
-
-    #display {
-      font-size: 32px;
-      margin-bottom: 15px;
-    }
-
-    .keys {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-    }
-
-    .keys button {
-      padding: 18px;
-      font-size: 22px;
-      border-radius: 14px;
-      border: none;
-    }
-  </style>
-</head>
-
-<body>
-
-  <h1>Мой баланс</h1>
-  <div id="balance">0</div>
-
-  <div class="actions">
-    <button class="income" onclick="openKeypad('income')">+ Доход</button>
-    <button class="expense" onclick="openKeypad('expense')">− Расход</button>
-  </div>
-
-  <!-- Клавиатура -->
-  <div id="keypad" class="keypad hidden">
-    <div id="display">0</div>
-
-    <div class="keys">
-      <button onclick="addDigit(1)">1</button>
-      <button onclick="addDigit(2)">2</button>
-      <button onclick="addDigit(3)">3</button>
-
-      <button onclick="addDigit(4)">4</button>
-      <button onclick="addDigit(5)">5</button>
-      <button onclick="addDigit(6)">6</button>
-
-      <button onclick="addDigit(7)">7</button>
-      <button onclick="addDigit(8)">8</button>
-      <button onclick="addDigit(9)">9</button>
-
-      <button onclick="removeDigit()">⌫</button>
-      <button onclick="addDigit(0)">0</button>
-      <button onclick="confirm()">OK</button>
-    </div>
-  </div>
-
-  <script>
-    let balance = 0;
-    let currentValue = "";
-    let currentType = "income";
-
-    function openKeypad(type) {
-      currentType = type;
-      currentValue = "";
-      updateDisplay();
-      document.getElementById("keypad").classList.remove("hidden");
-    }
-
-    function addDigit(d) {
-      currentValue += d;
-      updateDisplay();
-    }
-
-    function removeDigit() {
-      currentValue = currentValue.slice(0, -1);
-      updateDisplay();
-    }
-
-    function updateDisplay() {
-      document.getElementById("display").innerText = currentValue || "0";
-    }
-
-    function confirm() {
-      if (!currentValue) return;
-
-      const amount = Number(currentValue);
-      if (currentType === "income") balance += amount;
-      else balance -= amount;
-
-      document.getElementById("balance").innerText = balance;
-      document.getElementById("keypad").classList.add("hidden");
-    }
-  </script>
-
-</body>
-</html>
+  grid: {
+    flex: 1,
+    padding: 16,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  card: {
+    width: '48%',
+    height: 90,
+    backgroundColor: '#151A21',
+    borderRadius: 14,
+    marginBottom: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  icon: {
+    fontSize: 28,
+    marginBottom: 6,
+  },
+  title: {
+    color: '#E6EAF0',
+    fontSize: 14,
+  },
+});
